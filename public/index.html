@@ -61,29 +61,6 @@
     <button type="button" value="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1920&amp;bih=272&amp;q=%s&amp;oq=%s&amp;gs_l=img.3..0l10.15160.16864.0.17917.4.4.0.0.0.0.142.142.0j1.1.0....0...1ac.1.64.img..3.1.141.q08gka_1yD0">Google Images</button>
     <button type="submit">Get Input</button>
   </form>
-  <script>
-    (() => {
-      const value = decodeURIComponent(
-        location.search.replace('?input=', '').replace(/\++/g, '%20')
-      );
-
-      if (/^https?:\/\//.test(value)) {
-        location = value;
-        return;
-      }
-
-      const input = document.querySelector('input');
-      input.value = value;
-
-      const form = document.querySelector('form');
-      form.onclick = ({ target: { nodeName, value } }) => {
-        if (nodeName === 'BUTTON' && input.value) {
-          location = value.replace('%s', encodeURIComponent(input.value));
-        }
-      };
-
-      navigator.serviceWorker.register('/service-worker.js');
-    })()
-  </script>
+  <script async="async" src="index.js"></script>
 </body>
 </html>

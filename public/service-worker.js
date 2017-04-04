@@ -2,6 +2,7 @@ const CACHE_NAME = '1.0.0';
 const assets = [
   '/',
   '/index.html',
+  '/index.js',
 ];
 
 const isntCacheName = cacheName => cacheName !== CACHE_NAME;
