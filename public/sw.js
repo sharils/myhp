@@ -9,35 +9,47 @@ const isntCacheName = cacheName => cacheName !== CACHE_NAME;
 
 const toDeletePromise = cacheName => caches.delete(cacheName);
 
-this.addEventListener('install', e => e.waitUntil(
-  caches.open(CACHE_NAME).then(cache => cache.addAll(assets))
-));
+const cacheAssets = async function() {
+  const cache = await caches.open(CACHE_NAME);
 
-this.addEventListener('activate', e => e.waitUntil(
-  caches.keys()
-  .then(cacheNames => Promise.all(
-    cacheNames.filter(isntCacheName).map(toDeletePromise)
-  ))
-));
+  return cache => cache.addAll(assets);
+}
 
-this.addEventListener('fetch', e => e.respondWith(
-  caches.match(e.request.clone(), {
+const cachePair = async function(request, response) {
+  const cache = await caches.open(CACHE_NAME);
+
+  return cache.put(request, response);
+};
+
+const fetchCached = async function(request) {
+  const cached = await caches.match(request.clone(), {
     ignoreSearch: true,
-  })
-  .then(response => {
-    if (response) {
-      return response;
-    }
+  });
+  if (cached) {
+    return cached;
+  }
 
-    return fetch(e.request).then(r => {
-      if (!r.ok) {
-        return response;
-      }
+  const response = await fetch(request);
+  if (!response.ok) {
+    return cached;
+  }
 
-      caches.open(CACHE_NAME)
-      .then(cache => cache.put(e.request.clone(), r.clone()))
+  return Promise.race(
+    response,
+    cachePair(request.clone(), response.clone())
+  );
+};
 
-      return r;
-    });
-  })
-));
+const evictCache = async function() {
+  const cacheNames = await caches.keys();
+
+  return Promise.all(
+    cacheNames.filter(isntCacheName).map(toDeletePromise)
+  );
+};
+
+this.addEventListener('install', e => e.waitUntil(cacheAssets()));
+
+this.addEventListener('activate', e => e.waitUntil(evictCache()));
+
+this.addEventListener('fetch', e => e.respondWith(fetchCached(e.request)));
