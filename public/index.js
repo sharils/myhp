@@ -18,5 +18,7 @@
     }
   };
 
+  document.title = `${value} - My Homepage`;
+
   navigator.serviceWorker.register('/sw.js');
 })()
