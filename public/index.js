@@ -8,6 +8,8 @@
     return;
   }
 
+  document.title = `${value} - My Homepage`;
+
   const input = document.getElementsByTagName('input')[0];
   input.value = value;
 
