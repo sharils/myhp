@@ -7,6 +7,9 @@
   "author": "sharils <sharils@users.noreply.github.com>",
   "license": "AGPL-3.0",
   "private": true,
+  "scripts": {
+      "deploy": "firebase deploy"
+  },
   "devDependencies": {
     "firebase-tools": "^3.19.2"
   }
