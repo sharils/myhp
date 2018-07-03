@@ -1,0 +1,10 @@
+{
+  "name": "myhp",
+  "version": "1.0.0",
+  "description": "My Homepage",
+  "main": "\"\"",
+  "repository": "https://github.com/sharils/myhp",
+  "author": "sharils <sharils@users.noreply.github.com>",
+  "license": "AGPL-3.0",
+  "private": true
+}
